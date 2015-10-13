@@ -50,7 +50,7 @@ print(xtable(a_m), type="html")
 ```
 
 <!-- html table generated in R 3.2.1 by xtable 1.7-4 package -->
-<!-- Tue Oct 13 19:00:26 2015 -->
+<!-- Tue Oct 13 19:42:48 2015 -->
 <table border=1>
 <tr> <th>  </th> <th> Mean </th> <th> Median </th>  </tr>
   <tr> <td align="right"> 1 </td> <td align="right"> 10766.19 </td> <td align="right"> 10765.00 </td> </tr>
@@ -154,7 +154,7 @@ print(xtable(a_m), type="html")
 ```
 
 <!-- html table generated in R 3.2.1 by xtable 1.7-4 package -->
-<!-- Tue Oct 13 19:00:27 2015 -->
+<!-- Tue Oct 13 19:42:49 2015 -->
 <table border=1>
 <tr> <th>  </th> <th> Mean </th> <th> Median </th>  </tr>
   <tr> <td align="right"> with_NAs </td> <td align="right"> 10766.19 </td> <td align="right"> 10765.00 </td> </tr>
@@ -173,28 +173,29 @@ f$day<-ymd(f$date)
 
 #extract week days and put them in working dataset:
 dny<-weekdays(f$day)
-f$dny <- dny
+f_day<-f
+f_day$dny <- dny
+
 
 #set days to factor with two levels (weekday and weekend):
 #please notice that my days are in my language because I cannot change system locale to english speaking, tho it is not a problem
-f$weekday[f$dny== "sobota"] <-"weekend"
-f$weekday[f$dny == "neděle"] <-"weekend"
-f$weekday[f$dny == "neděle"] <-"weekend"
-f$weekday[f$dny == "pondělí"] <-"weekday"
-f$weekday[f$dny == "úterý"] <-"weekday"
-f$weekday[f$dny == "středa"] <-"weekday"
-f$weekday[f$dny == "čtvrtek"] <-"weekday"
-f$weekday[f$dny == "pátek"] <-"weekday"
+f_day$weekday[f_day$dny== "sobota"] <-"weekend"
+f_day$weekday[f_day$dny == "neděle"] <-"weekend"
+f_day$weekday[f_day$dny == "neděle"] <-"weekend"
+f_day$weekday[f_day$dny == "pondělí"] <-"weekday"
+f_day$weekday[f_day$dny == "úterý"] <-"weekday"
+f_day$weekday[f_day$dny == "středa"] <-"weekday"
+f_day$weekday[f_day$dny == "čtvrtek"] <-"weekday"
+f_day$weekday[f_day$dny == "pátek"] <-"weekday"
 
-#check that there are only two levels and make it factor:
-table(f$weekday)
-f$weekday<-as.factor(f$weekday)
+#check that there are only two levels::
+table(f_day$weekday)
 ```
 
 ```
 ## 
-## weekend 
-##    2304
+## weekday weekend 
+##   12960    4608
 ```
 
 2.Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval  (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). 
@@ -202,8 +203,8 @@ f$weekday<-as.factor(f$weekday)
 
 ```r
 #calculate mean of steps in interval of weekdays or weekends:
-group_by(f, weekday, interval) %>%
-    summarize(meanWeek = mean(steps)) -> m
+m<- group_by(f_day, weekday, interval) %>%
+    summarize(meanWeek = mean(steps))
 
 #time series plot:
 ggplot(m, aes(x=interval, y=meanWeek, group=weekday)) +
