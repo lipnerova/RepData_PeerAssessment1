@@ -5,6 +5,8 @@ output:
     keep_md: true
 ---
 
+## Please note that the document uses UTF-8 encoding.
+
 
 ## Loading and preprocessing the data
 
@@ -36,7 +38,8 @@ a_agg<-aggregate(steps ~ date, data=a, sum)
 2. Make a histogram of the total number of steps taken each day
 
 ```r
-ggplot(a_agg, aes(steps)) + geom_histogram()
+ggplot(a_agg, aes(steps)) + geom_histogram() +
+    labs(title="Sum of steps taken per day", x="Steps", y="Count")
 ```
 
 ![plot of chunk histogram1](figure/histogram1-1.png) 
@@ -50,7 +53,7 @@ print(xtable(a_m), type="html")
 ```
 
 <!-- html table generated in R 3.2.1 by xtable 1.7-4 package -->
-<!-- Tue Oct 13 19:42:48 2015 -->
+<!-- Tue Oct 13 20:48:27 2015 -->
 <table border=1>
 <tr> <th>  </th> <th> Mean </th> <th> Median </th>  </tr>
   <tr> <td align="right"> 1 </td> <td align="right"> 10766.19 </td> <td align="right"> 10765.00 </td> </tr>
@@ -154,7 +157,7 @@ print(xtable(a_m), type="html")
 ```
 
 <!-- html table generated in R 3.2.1 by xtable 1.7-4 package -->
-<!-- Tue Oct 13 19:42:49 2015 -->
+<!-- Tue Oct 13 20:48:28 2015 -->
 <table border=1>
 <tr> <th>  </th> <th> Mean </th> <th> Median </th>  </tr>
   <tr> <td align="right"> with_NAs </td> <td align="right"> 10766.19 </td> <td align="right"> 10765.00 </td> </tr>
@@ -207,7 +210,7 @@ m<- group_by(f_day, weekday, interval) %>%
     summarize(meanWeek = mean(steps))
 
 #time series plot:
-ggplot(m, aes(x=interval, y=meanWeek, group=weekday)) +
+ggplot(m, aes(x=interval, y=meanWeek, group=factor(weekday))) +
     geom_line(color="blue") + facet_grid(weekday~.) +
     labs(title="Average number of steps taken, 
          averaged across all weekday days or weekend days", 
