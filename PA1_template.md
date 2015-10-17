@@ -5,8 +5,6 @@ output:
     keep_md: true
 ---
 
-## Please note that the document uses UTF-8 encoding.
-
 
 ## Loading and preprocessing the data
 
@@ -20,6 +18,15 @@ library(knitr)
 ```
 
 Reading in data:
+
+```r
+#first set system locals to english, so the days will be in english
+Sys.setlocale("LC_ALL","English")
+```
+
+```
+## [1] "LC_COLLATE=English_United States.1252;LC_CTYPE=English_United States.1252;LC_MONETARY=English_United States.1252;LC_NUMERIC=C;LC_TIME=English_United States.1252"
+```
 
 ```r
 #data have to be in working directory:
@@ -53,7 +60,7 @@ print(xtable(a_m), type="html")
 ```
 
 <!-- html table generated in R 3.2.1 by xtable 1.7-4 package -->
-<!-- Tue Oct 13 20:48:27 2015 -->
+<!-- Sat Oct 17 19:29:26 2015 -->
 <table border=1>
 <tr> <th>  </th> <th> Mean </th> <th> Median </th>  </tr>
   <tr> <td align="right"> 1 </td> <td align="right"> 10766.19 </td> <td align="right"> 10765.00 </td> </tr>
@@ -157,7 +164,7 @@ print(xtable(a_m), type="html")
 ```
 
 <!-- html table generated in R 3.2.1 by xtable 1.7-4 package -->
-<!-- Tue Oct 13 20:48:28 2015 -->
+<!-- Sat Oct 17 19:29:26 2015 -->
 <table border=1>
 <tr> <th>  </th> <th> Mean </th> <th> Median </th>  </tr>
   <tr> <td align="right"> with_NAs </td> <td align="right"> 10766.19 </td> <td align="right"> 10765.00 </td> </tr>
@@ -168,7 +175,7 @@ print(xtable(a_m), type="html")
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
-1.Create a new factor variable in the dataset with two  levels – “weekday” and “weekend” indicating whether a given date is a weekday or weekend day.
+1.Create a new factor variable in the dataset with two  levels "weekday"" and "weekend"" indicating whether a given date is a weekday or weekend day.
 
 ```r
 #library(lubridate) to get correct format of dates for weekdays():
@@ -181,15 +188,9 @@ f_day$dny <- dny
 
 
 #set days to factor with two levels (weekday and weekend):
-#please notice that my days are in my language because I cannot change system locale to english speaking, tho it is not a problem
-f_day$weekday[f_day$dny== "sobota"] <-"weekend"
-f_day$weekday[f_day$dny == "neděle"] <-"weekend"
-f_day$weekday[f_day$dny == "neděle"] <-"weekend"
-f_day$weekday[f_day$dny == "pondělí"] <-"weekday"
-f_day$weekday[f_day$dny == "úterý"] <-"weekday"
-f_day$weekday[f_day$dny == "středa"] <-"weekday"
-f_day$weekday[f_day$dny == "čtvrtek"] <-"weekday"
-f_day$weekday[f_day$dny == "pátek"] <-"weekday"
+f_day$weekday <- "weekday"
+f_day$weekday[grepl('^S', f_day$dny)] <- "weekend"
+
 
 #check that there are only two levels::
 table(f_day$weekday)
